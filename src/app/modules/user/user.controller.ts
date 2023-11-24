@@ -96,6 +96,7 @@ const updateSingleUser = async (req: Request, res: Response) => {
       error: {
         code: 404,
         description: 'User not found!',
+        error,
       },
     });
   }

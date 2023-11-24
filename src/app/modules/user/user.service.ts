@@ -22,12 +22,20 @@ const getSingleUserFromDB = async (userId: number) => {
 };
 
 const updateSingleUserIntoDB = async (userId: number, user: IUser) => {
-  const result = await User.updateOne({ userId }, { $set: user });
-  return result;
+  const existingUser = await User.isUserExists(userId);
+
+  if (existingUser) {
+    const result = await User.updateOne({ userId }, { $set: user });
+    return result;
+  } else throw new Error("User doesn't exist");
 };
 
 const deleteUserFromDB = async (userId: number) => {
-  await User.deleteOne({ userId });
+  const existingUser = await User.isUserExists(userId);
+
+  if (existingUser) {
+    await User.deleteOne({ userId });
+  } else throw new Error("User doesn't exist");
 };
 
 export const userServices = {
