@@ -16,8 +16,14 @@ const getSingleUserFromDB = async (userId: number) => {
   return result;
 };
 
+const updateSingleUserIntoDB = async (userId: number, user: IUser) => {
+  const result = await User.updateOne({ userId }, { $set: user });
+  return result;
+};
+
 export const userServices = {
   createUserIntoDB,
   getAllUsersFromDB,
   getSingleUserFromDB,
+  updateSingleUserIntoDB,
 };
