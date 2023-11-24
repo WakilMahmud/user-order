@@ -13,8 +13,14 @@ const addressSchema = new Schema<IAddress>({
 });
 
 const userSchema = new Schema<IUser>({
-  userId: Number,
-  username: String,
+  userId: {
+    type: Number,
+    unique: true,
+  },
+  username: {
+    type: String,
+    unique: true,
+  },
   password: String,
   fullName: fullNameSchema,
   age: Number,

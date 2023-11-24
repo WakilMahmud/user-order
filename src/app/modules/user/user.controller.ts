@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 import { userServices } from './user.service';
+import userValidationSchema from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const { user } = req.body;
-    const result = await userServices.createUserIntoDB(user);
+
+    const userParsedData = userValidationSchema.parse(user);
+
+    const result = await userServices.createUserIntoDB(userParsedData);
 
     res.status(200).send({
       success: true,
@@ -18,6 +22,7 @@ const createUser = async (req: Request, res: Response) => {
       error: {
         code: 417,
         description: 'Expectation Failed',
+        error: error,
       },
     });
   }
@@ -70,9 +75,12 @@ const updateSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const { user } = req.body;
+
+    const userParsedData = userValidationSchema.parse(user);
+
     const result = await userServices.updateSingleUserIntoDB(
       Number(userId),
-      user,
+      userParsedData,
     );
 
     res.status(200).send({
