@@ -12,8 +12,13 @@ const getAllUsersFromDB = async () => {
 };
 
 const getSingleUserFromDB = async (userId: number) => {
-  const result = await User.findOne({ userId });
-  return result;
+  const existingUser = await User.isUserExists(userId);
+
+  if (existingUser) {
+    return existingUser;
+  } else throw new Error("User doesn't exist");
+
+  // const result = await User.findOne({ userId });
 };
 
 const updateSingleUserIntoDB = async (userId: number, user: IUser) => {
