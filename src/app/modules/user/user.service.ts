@@ -7,7 +7,7 @@ const createUserIntoDB = async (user: IUser) => {
 };
 
 const getAllUsersFromDB = async () => {
-  const result = await User.find({});
+  const result = await User.find();
   return result;
 };
 
