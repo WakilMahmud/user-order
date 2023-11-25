@@ -7,7 +7,14 @@ const createUserIntoDB = async (user: IUser) => {
 };
 
 const getAllUsersFromDB = async () => {
-  const result = await User.find();
+  const result = await User.find().select({
+    _id: 0,
+    username: 1,
+    fullName: 1,
+    age: 1,
+    email: 1,
+    address: 1,
+  });
   return result;
 };
 
@@ -26,7 +33,13 @@ const updateSingleUserIntoDB = async (userId: number, user: IUser) => {
 
   if (existingUser) {
     const result = await User.updateOne({ userId }, { $set: user });
-    return result;
+
+    if (result.modifiedCount > 0) {
+      const { password, ...updatedUserWithoutPassword } = user;
+      //TODO: password need to be hashed
+
+      return updatedUserWithoutPassword;
+    }
   } else throw new Error("User doesn't exist");
 };
 

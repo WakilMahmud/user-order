@@ -48,4 +48,15 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+//exclude password field and __v, unwanted _id fields in the response data
+userSchema.methods.toJSON = function () {
+  const userObject = this.toObject();
+  delete userObject.password;
+  delete userObject.fullName._id;
+  delete userObject.address._id;
+  delete userObject._id;
+  delete userObject.__v;
+  return userObject;
+};
+
 export const User = model<IUser, UserModel>('User', userSchema);
