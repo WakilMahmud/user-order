@@ -15,14 +15,13 @@ const createUser = async (req: Request, res: Response) => {
       message: 'User created successfully!',
       data: result,
     });
-  } catch (error) {
+  } catch (err: any) {
     res.status(417).send({
       success: false,
-      message: 'User creation failed!',
+      message: err?.message || 'something went wrong',
       error: {
         code: 417,
         description: 'Expectation Failed',
-        error: error,
       },
     });
   }
@@ -37,13 +36,13 @@ const getAllUsers = async (req: Request, res: Response) => {
       message: 'Users fetched successfully!',
       data: result,
     });
-  } catch (error) {
+  } catch (err: any) {
     res.status(404).send({
       success: false,
-      message: 'Users not found',
+      message: err?.message || 'something went wrong',
       error: {
         code: 404,
-        description: 'Users not found!',
+        description: 'Not found!',
       },
     });
   }
@@ -59,14 +58,13 @@ const getSingleUser = async (req: Request, res: Response) => {
       message: 'User fetched successfully!',
       data: result,
     });
-  } catch (error) {
+  } catch (err: any) {
     res.status(404).send({
       success: false,
-      message: 'User not found',
+      message: err?.message || 'something went wrong',
       error: {
         code: 404,
         description: 'User not found!',
-        error,
       },
     });
   }
@@ -89,14 +87,13 @@ const updateSingleUser = async (req: Request, res: Response) => {
       message: 'User updated successfully!',
       data: result,
     });
-  } catch (error) {
-    res.status(404).send({
+  } catch (err: any) {
+    res.status(417).send({
       success: false,
-      message: 'User not found',
+      message: err?.message || 'something went wrong',
       error: {
-        code: 404,
-        description: 'User not found!',
-        error,
+        code: 417,
+        description: 'Expectation failed!',
       },
     });
   }
@@ -113,13 +110,13 @@ const deleteUser = async (req: Request, res: Response) => {
       message: 'User deleted successfully!',
       data: null,
     });
-  } catch (error) {
-    res.status(417).send({
+  } catch (err: any) {
+    res.status(404).send({
       success: false,
-      message: 'User not deleted',
+      message: err?.message || 'something went wrong',
       error: {
-        code: 417,
-        description: 'Expectation failed!',
+        code: 404,
+        description: 'User not found!',
       },
     });
   }

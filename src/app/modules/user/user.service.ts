@@ -1,7 +1,12 @@
+import config from '../../config';
 import { IUser } from './user.interface';
 import { User } from './user.model';
+import bcrypt from 'bcrypt';
 
 const createUserIntoDB = async (user: IUser) => {
+  if (await User.isUserExists(user.userId))
+    throw new Error('User already exists');
+
   const result = await User.create(user);
   return result;
 };
@@ -23,24 +28,25 @@ const getSingleUserFromDB = async (userId: number) => {
 
   if (existingUser) {
     return existingUser;
-  } else throw new Error("User doesn't exist");
-
-  // const result = await User.findOne({ userId });
+  } else throw new Error('User not found');
 };
 
 const updateSingleUserIntoDB = async (userId: number, user: IUser) => {
   const existingUser = await User.isUserExists(userId);
 
   if (existingUser) {
+    user.password = await bcrypt.hash(
+      user.password,
+      Number(config.bcrypt_salt_rounds),
+    );
+
     const result = await User.updateOne({ userId }, { $set: user });
-
     if (result.modifiedCount > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
       const { password, ...updatedUserWithoutPassword } = user;
-      //TODO: password need to be hashed
-
       return updatedUserWithoutPassword;
-    }
-  } else throw new Error("User doesn't exist");
+    } else throw new Error('Failed to update user');
+  } else throw new Error('User not found');
 };
 
 const deleteUserFromDB = async (userId: number) => {
@@ -48,7 +54,7 @@ const deleteUserFromDB = async (userId: number) => {
 
   if (existingUser) {
     await User.deleteOne({ userId });
-  } else throw new Error("User doesn't exist");
+  } else throw new Error('User not found');
 };
 
 export const userServices = {
