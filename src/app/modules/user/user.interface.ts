@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { Model } from 'mongoose';
 
 export interface IFullName {
@@ -21,6 +22,7 @@ export interface IUser {
   isActive: boolean;
   hobbies: string[];
   address: IAddress;
+  orders?: Types.ObjectId;
 }
 
 export interface UserModel extends Model<IUser> {
