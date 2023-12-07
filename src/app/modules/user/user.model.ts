@@ -20,7 +20,7 @@ const addressSchema = new Schema<IAddress>({
   country: { type: String, required: [true, 'Country is required'] },
 });
 
-const userSchema = new Schema<IUser, UserModel>({
+const userSchema = new Schema<IUser>({
   userId: {
     type: Number,
     required: [true, 'User ID is required'],
@@ -41,7 +41,6 @@ const userSchema = new Schema<IUser, UserModel>({
   isActive: { type: Boolean, required: [true, 'isActive is required'] },
   hobbies: { type: [String], required: [true, 'Hobbies Array is required'] },
   address: { type: addressSchema, required: [true, 'Address is required'] },
-  orders: { type: Schema.Types.ObjectId, ref: 'Orders' },
 });
 
 userSchema.statics.isUserExists = async function (userId: number) {

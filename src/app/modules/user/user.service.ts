@@ -4,16 +4,16 @@ import { User } from './user.model';
 import bcrypt from 'bcrypt';
 
 const createUserIntoDB = async (user: IUser) => {
-  if (await User.isUserExists(user.userId))
-    throw new Error('User already exists');
+  // if (await User.isUserExists(user.userId))
+  //   throw new Error('User already exists');
 
   const result = await User.create(user);
   return result;
 };
 
 const getAllUsersFromDB = async () => {
-  const result = await User.find().select({
-    _id: 0,
+  const result = await User.find({}).select({
+    // _id: 0,
     username: 1,
     fullName: 1,
     age: 1,
@@ -40,12 +40,13 @@ const updateSingleUserIntoDB = async (userId: number, user: IUser) => {
       Number(config.bcrypt_salt_rounds),
     );
 
-    const result = await User.updateOne({ userId }, { $set: user });
-    if (result.modifiedCount > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-      const { password, ...updatedUserWithoutPassword } = user;
-      return updatedUserWithoutPassword;
-    } else throw new Error('Failed to update user');
+    const result = await User.findOneAndUpdate(
+      { userId },
+      { $set: user },
+      { new: true },
+    );
+
+    return result;
   } else throw new Error('User not found');
 };
 
