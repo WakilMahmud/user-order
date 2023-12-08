@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 export interface IFullName {
   firstName: string;
@@ -10,7 +10,9 @@ export interface IAddress {
   city: string;
   country: string;
 }
-
+export interface IOrder {
+  _id: Types.ObjectId;
+}
 export interface IUser {
   userId: number;
   username: string;
@@ -21,6 +23,7 @@ export interface IUser {
   isActive: boolean;
   hobbies: string[];
   address: IAddress;
+  orders?: IOrder[];
 }
 
 export interface UserModel extends Model<IUser> {

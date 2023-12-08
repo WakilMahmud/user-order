@@ -1,14 +1,24 @@
+import { User } from '../user/user.model';
 import { IOrder } from './order.interface';
 import { Order } from './order.model';
 
 const createOrderIntoDB = async (userId: number, order: IOrder) => {
-  await Order.create({ userId: userId, ...order });
+  const existingUser = await User.isUserExists(userId);
+
+  if (existingUser) {
+    const createdOrder = await Order.create(order);
+
+    await User.updateOne({ userId }, { $push: { orders: createdOrder } });
+  } else {
+    throw new Error('User not found');
+  }
 };
-const getAllOrdersFromDB = () => {};
-const getTotalPriceFromDB = () => {};
+
+// const getAllOrdersFromDB = () => {};
+// const getTotalPriceFromDB = () => {};
 
 export const orderServices = {
   createOrderIntoDB,
-  getAllOrdersFromDB,
-  getTotalPriceFromDB,
+  // getAllOrdersFromDB,
+  // getTotalPriceFromDB,
 };

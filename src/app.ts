@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
-import { userRoutes } from './app/modules/user/user.route';
-import { orderRoutes } from './app/modules/order/order.route';
+import { routes } from './app/modules/user/user.route';
 
 const app: Application = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/users', userRoutes);
-// app.use('/api/users', orderRoutes);
+app.use('/api/users', routes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('User Order Management!');
