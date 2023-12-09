@@ -29,11 +29,32 @@ const createOrder = async (req: Request, res: Response) => {
   }
 };
 
-// const getAllOrders = (req: Request, res: Response) => {};
+const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const orders = await orderServices.getAllOrdersFromDB(Number(userId));
+
+    res.status(200).send({
+      success: true,
+      message: 'Order fetched successfully!',
+      data: { orders },
+    });
+  } catch (err: any) {
+    res.status(404).send({
+      success: false,
+      message: err?.message || 'something went wrong',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
 // const getTotalPrice = (req: Request, res: Response) => {};
 
 export const orderControllers = {
   createOrder,
-  // getAllOrders,
+  getAllOrders,
   // getTotalPrice
 };

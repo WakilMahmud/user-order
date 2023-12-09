@@ -10,9 +10,9 @@ export interface IAddress {
   city: string;
   country: string;
 }
-export interface IOrder {
-  _id: Types.ObjectId;
-}
+// export interface IOrder {
+//   _id: Types.ObjectId;
+// }
 export interface IUser {
   userId: number;
   username: string;
@@ -23,7 +23,8 @@ export interface IUser {
   isActive: boolean;
   hobbies: string[];
   address: IAddress;
-  orders?: IOrder[];
+  // orders?: IOrder[];
+  orders?: Types.ObjectId[];
 }
 
 export interface UserModel extends Model<IUser> {
